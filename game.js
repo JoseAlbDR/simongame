@@ -7,7 +7,7 @@ const btnArr = ["green", "red", "yellow", "blue"];
 let maxScore;
 let level = 0;
 let clicks = 1;
-let player = "";
+let player;
 let players = [];
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,18 +58,26 @@ const acceptModal = function () {
   $("#form-button").on("click", function (event) {
     event.preventDefault();
     const inputName = $("#player").val();
+    console.log(players);
+    console.log(
+      players.some(function (player) {
+        return inputName === player;
+      })
+    );
 
     if (inputName.trim() === "") {
       $("#err-msg").text("New Player Name Cant Be Empty");
       return;
+    } else if (
+      players.some(function (player) {
+        return inputName === player.name;
+      })
+    ) {
+      $("#err-msg").text("Player already exist.");
     } else {
-      players.forEach((player) => {
-        if (inputName === player.name) {
-          $("#err-msg").text("Player already exist.");
-          return;
-        }
-      });
-      players.push({ name: inputName, maxScore: 0 });
+      player = { name: inputName, maxScore: 0 };
+      players.push(player);
+
       saveData();
       closeModal();
       startKeyListener();
@@ -211,6 +219,7 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
+    $("#player-name").text("");
   }
   console.log(maxScore);
 
