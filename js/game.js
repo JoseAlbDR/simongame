@@ -223,12 +223,14 @@ const btnClicked = function (event) {
     clicks = 1;
     // If Clicks are the same amount of colors in gamePattern
   } else if (clicks === gamePattern.length) {
-    setTimeout(function () {
-      // Call next secuence of colors
-      nextSecuence();
-      // Reset clicks
-      clicks = 1;
-    }, 1000);
+    console.log(gamePattern);
+
+    // Call next secuence of colors
+    nextSecuence();
+
+    // Reset clicks
+    clicks = 1;
+
     // If not increase clicks and keep checking
   } else {
     clicks += 1;
@@ -283,11 +285,18 @@ const nextSecuence = function () {
   playerPattern = [];
   const randomNum = generateRandom();
   const color = btnArr[randomNum];
-  const btn = $(`.${color}`);
+  // const btn = $(`.${color}`);
   const audios = generateBtnAudio();
 
   gamePattern.push(color);
-  showGameAnimation(btn, audios);
+
+  let i = 0;
+  const interval = setInterval(function () {
+    showGameAnimation($(`.${gamePattern[i]}`), audios);
+    i++;
+    if (i === gamePattern.length) clearInterval(interval);
+  }, 1000);
+
   header.text(`Level ${level}`);
   level += 1;
 };
