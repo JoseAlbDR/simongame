@@ -46,6 +46,7 @@ const closeModal = function () {
     $(".modal").css("z-index", -1);
   }, 500);
 };
+
 // Close Modal listeners
 const escCloseModal = function () {
   $(".close-modal").on("click", function (event) {
@@ -54,15 +55,28 @@ const escCloseModal = function () {
   });
 };
 
+// Select form (empit input when select change)
+const optionListListener = function () {
+  $("#players").on("change", function () {
+    $("#player").val("");
+  });
+};
+
+// Accept button
 const acceptModal = function () {
   $("#form-button").on("click", function (event) {
+    // Prevent submit button default
     event.preventDefault();
-    const inputName = $("#player").val();
-    console.log($("#players").val());
 
+    // Save input data
+    const inputName = $("#player").val();
+
+    // If no input and no player selected
     if (inputName.trim() === "" && $("#players").val() === "") {
       $("#err-msg").html("<p>New Player Name Cant Be Empty</p>");
       return;
+
+      // If player selected already exist
     } else if (
       players.some(function (player) {
         return inputName === player.name;
@@ -71,14 +85,21 @@ const acceptModal = function () {
       $("#err-msg").html(
         "<p>Player already exist.</p><p>Choose player from list and Click Accept.</p>"
       );
+
+      // If input not empty and player does not exist
     } else {
+      // If no player is selected from list, create new player
       if ($("#players").val() === "") {
         player = { name: inputName, maxScore: 0 };
+
+        // If there is a player selected in list, load that player
       } else {
         player = players.filter((player) => {
           if (player.name === $("#players").val()) return player;
         });
       }
+
+      // Save player in variable, close modal and star keylistener
       players.push(player);
       saveData();
       closeModal();
@@ -239,6 +260,7 @@ const nextSecuence = function () {
   level += 1;
 };
 
+// Render form player list from saved data
 const renderModalForm = function () {
   $("#players").html("");
 
@@ -258,8 +280,8 @@ const gameLoop = function () {
   escCloseModal();
   acceptModal();
   players = loadData();
-
   renderModalForm();
+  optionListListener();
 };
 
 gameLoop();
