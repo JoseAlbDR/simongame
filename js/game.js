@@ -81,7 +81,7 @@ const acceptModal = function () {
       // If player selected already exist
     } else if (
       players.some(function (player) {
-        return inputName === player.name;
+        return inputName.toLowerCase() === player.name.toLowerCase();
       })
     ) {
       $("#err-msg").html(
@@ -99,7 +99,8 @@ const acceptModal = function () {
         // If there is a player selected in list, load that player
       } else {
         player = players.filter((player) => {
-          if (player.name === $("#players").val()) return player;
+          if (player.name.toLowerCase() === $("#players").val().toLowerCase())
+            return player;
         });
         [player] = [...player];
       }
