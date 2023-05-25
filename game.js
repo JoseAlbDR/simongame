@@ -116,12 +116,13 @@ const acceptModal = function () {
 
 //////////////////////////////////////////////////////
 // Game
-//
 
+// Start game starter click listener
 const startTitleListener = function () {
   $("#level-title").on("click", nextSecuence);
 };
 
+// Stop click listener
 const stopTitleListener = function () {
   $("#level-title").off();
 };
@@ -136,7 +137,7 @@ const stopBtnListeners = function () {
   buttons.off();
 };
 
-// Start keyboard listener
+// Start game starter keyboard listener
 const startKeyListener = function () {
   $(document).on("keydown", nextSecuence);
 };
@@ -262,7 +263,7 @@ const gameOver = function () {
 const nextSecuence = function () {
   // If first call
   if (level === 0) {
-    $(".container").removeClass("hidden");
+    $(".buttons").removeClass("hidden");
     // Stop game starter listener
     stopTitleListener();
     stopKeyListener();
