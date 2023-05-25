@@ -190,7 +190,7 @@ const showBtnAnimation = function (btn) {
 
 // Game over animation
 const showGameOverAnimation = function () {
-  header.text("Game Over, Press Any Key To Restart");
+  header.text("Game Over, Press Any Key or Click Me To Restart");
   $("body").addClass("game-over");
   setTimeout(function () {
     $("body").removeClass("game-over");
