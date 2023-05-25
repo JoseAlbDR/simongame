@@ -35,7 +35,7 @@ const generateRandom = function () {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // LISTENERS
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 // Modal
 
 // Close modal
@@ -112,6 +112,9 @@ const acceptModal = function () {
   });
 };
 
+//////////////////////////////////////////////////////
+// Game
+//
 // Start button listener
 const startBtnListeners = function () {
   buttons.on("click", btnClicked);
@@ -281,8 +284,6 @@ const renderModalForm = function () {
 
 // Game Start
 const gameLoop = function () {
-  // player = prompt("Player name?");
-  // $(".modal").removeClass("hidden");
   $(".overlay").removeClass("hidden");
   escCloseModal();
   acceptModal();
