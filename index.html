@@ -30,12 +30,12 @@
     <div class="modal">
       <button class="close-modal">&times;</button>
       <h1>Create New Player or Choose One</h1>
-      <p id="err-msg"></p>
+      <div id="err-msg"></div>
       <p>Create New Player</p>
       <form id="player-form">
-        <input type="text" name="player-name" id="player" autofocus />
+        <input id="player" type="text" name="player-name" autofocus />
         <label for="players"> <p>Choose one</p> </label>
-        <select name="players" id="players"></select>
+        <select id="players" name="players"></select>
         <button id="form-button">Accept</button>
       </form>
     </div>

@@ -58,12 +58,7 @@ const acceptModal = function () {
   $("#form-button").on("click", function (event) {
     event.preventDefault();
     const inputName = $("#player").val();
-    console.log(players);
-    console.log(
-      players.some(function (player) {
-        return inputName === player;
-      })
-    );
+    console.log($("#players").val());
 
     if (inputName.trim() === "") {
       $("#err-msg").text("New Player Name Cant Be Empty");
@@ -73,9 +68,12 @@ const acceptModal = function () {
         return inputName === player.name;
       })
     ) {
-      $("#err-msg").text("Player already exist.");
+      $("#err-msg").html(
+        "<p>Player already exist.</p><p>Choose player from list and Click Accept.</p>"
+      );
     } else {
-      player = { name: inputName, maxScore: 0 };
+      if ($("#players").val() === "") player = { name: inputName, maxScore: 0 };
+
       players.push(player);
 
       saveData();
@@ -194,6 +192,7 @@ const gameOver = function () {
   // Show animation
   showGameOverAnimation();
 
+  if (level - 1 > player.maxScore) player.maxScore = level - 1;
   // Save score
   saveData();
 
@@ -219,7 +218,8 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
-    $("#player-name").text("");
+    $("#player-name").text(player.name);
+    $("#max-score").text(`Max Score: ${player.maxScore}`);
   }
   console.log(maxScore);
 
@@ -238,16 +238,13 @@ const nextSecuence = function () {
 const renderModalForm = function () {
   $("#players").html("");
 
-  if (players.length === 0) {
-    $("#players").html(`<option value="empty">Empty</option>`);
-  } else {
-    players.forEach((player) => {
-      console.log(player);
-      $("#players").append(
-        `<option value="${player.name}">${player.name}</option>`
-      );
-    });
-  }
+  $("#players").append(`<option value=""></option>`);
+  players.forEach((player) => {
+    console.log(player);
+    $("#players").append(
+      `<option value="${player.name}">${player.name}</option>`
+    );
+  });
 };
 
 // Game Start
