@@ -61,8 +61,8 @@ const escCloseModal = function () {
 
 // Select form (empit input when select change)
 const optionListListener = function () {
-  $("#players").on("change", function () {
-    $("#player").val("");
+  $("#playerList").on("change", function () {
+    $("#playerName").val("");
   });
 };
 
@@ -214,11 +214,13 @@ const btnClicked = function (event) {
   // Save player pattern
   playerPattern.push(event.target.id);
 
+  console.log("Clicks" + clicks);
+
   // Check if button's color is equal to color in gamePatter
   // If not GAME OVER
   if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
     gameOver();
-
+    clicks = 1;
     // If Clicks are the same amount of colors in gamePattern
   } else if (clicks === gamePattern.length) {
     setTimeout(function () {
@@ -283,7 +285,6 @@ const nextSecuence = function () {
   const color = btnArr[randomNum];
   const btn = $(`.${color}`);
   const audios = generateBtnAudio();
-  console.log(randomNum);
 
   gamePattern.push(color);
   showGameAnimation(btn, audios);
