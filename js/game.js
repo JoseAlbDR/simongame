@@ -73,12 +73,13 @@ const acceptModal = function () {
     event.preventDefault();
 
     // Save input data
-    const inputName = $("#player").val();
-    const selectedPlayer = $("#players").val();
+    const inputName = $("#playerName").val();
+    const selectedPlayer = $("#playerList").val();
+    const errMsg = $("#err-msg");
 
     // If no input and no player selected
     if (inputName.trim() === "" && selectedPlayer === "") {
-      $("#err-msg").html("<p>New Player Name Cant Be Empty</p>");
+      errMsg.html("<p>New Player Name Cant Be Empty</p>");
       return;
     }
 
@@ -88,7 +89,7 @@ const acceptModal = function () {
         return inputName.toLowerCase() === player.name.toLowerCase();
       })
     ) {
-      $("#err-msg").html(
+      errMsg.html(
         "<p>Player already exist.</p><p>Choose player from list and Click Accept.</p>"
       );
 
@@ -292,11 +293,11 @@ const nextSecuence = function () {
 
 // Render form player list from saved data
 const renderModalForm = function () {
-  $("#players").html("");
+  $("#playerList").html("");
 
-  $("#players").append(`<option value=""></option>`);
+  $("#playerList").append(`<option value=""></option>`);
   players.forEach((player) => {
-    $("#players").append(
+    $("#playerList").append(
       `<option value="${player.name}">${player.name}</option>`
     );
   });
