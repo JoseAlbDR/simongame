@@ -1,13 +1,27 @@
 const header = $("h1");
 const buttons = $("div.btn");
-const played = [];
+const pattern = [];
 const btnArr = ["green", "red", "yellow", "blue"];
+
+const generateAudio = function () {
+  return btnArr.map((color) => {
+    const audioElement = document.createElement("audio");
+    audioElement.setAttribute("src", `./sounds/${color}.mp3`);
+    audioElement.setAttribute("data-color", color);
+
+    return audioElement;
+  });
+};
 
 const btnClicked = function (btn) {
   $(`div#${btn.target.id}`).addClass("pressed");
   setTimeout(function () {
     $(`div#${btn.target.id}`).removeClass("pressed");
   }, 100);
+  const audios = generateAudio();
+  const jButton = $(`#${btn.target.id}`);
+  playSound($(jButton), audios);
+  pattern.push(btn.target.id);
 };
 
 const addBtnListeners = function () {
@@ -15,25 +29,35 @@ const addBtnListeners = function () {
 };
 
 const generateRandom = function () {
-  return Math.trunc(Math.random() * 4 + 1);
+  return Math.trunc(Math.random() * 4);
 };
 
 const activeButton = function (btn) {
   btn.fadeToggle();
 };
 
-const btnAnimation = function (btn) {
+const playSound = function (btn, audios) {
+  audios.forEach((audio) => {
+    if (audio.dataset.color === btn.attr("id")) audio.play();
+  });
+};
+
+const btnAnimation = function (btn, audios) {
   btn.fadeToggle("fast", "linear");
   btn.fadeToggle("fast", "linear");
+
+  playSound(btn, audios);
 };
 
 const game = function () {
-  stopKeyListener();
+  // stopKeyListener();
   const randomNum = generateRandom();
   const color = btnArr[randomNum];
   const btn = $(`.${color}`);
-  played.push(btn);
-  btnAnimation(btn);
+  console.log(btn);
+
+  const audios = generateAudio();
+  btnAnimation(btn, audios);
   addBtnListeners();
 };
 
