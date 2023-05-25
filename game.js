@@ -91,17 +91,19 @@ const acceptModal = function () {
       // If no player is selected from list, create new player
       if ($("#players").val() === "") {
         player = { name: inputName, maxScore: 0 };
+        players.push(player);
+        saveData();
 
         // If there is a player selected in list, load that player
       } else {
         player = players.filter((player) => {
           if (player.name === $("#players").val()) return player;
         });
+        [player] = [...player];
       }
 
       // Save player in variable, close modal and star keylistener
-      players.push(player);
-      saveData();
+
       closeModal();
       startKeyListener();
     }
@@ -217,7 +219,9 @@ const gameOver = function () {
   // Show animation
   showGameOverAnimation();
 
+  // Update player maxScore if needed
   if (level - 1 > player.maxScore) player.maxScore = level - 1;
+
   // Save score
   saveData();
 
@@ -243,10 +247,11 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
+    console.log(player);
+
     $("#player-name").text(player.name);
     $("#max-score").text(`Max Score: ${player.maxScore}`);
   }
-  console.log(maxScore);
 
   // Secuence loop
   playerPattern = [];
@@ -277,7 +282,7 @@ const gameLoop = function () {
   // player = prompt("Player name?");
   // $(".modal").removeClass("hidden");
   $(".overlay").removeClass("hidden");
-  escCloseModal();
+  // escCloseModal();
   acceptModal();
   players = loadData();
   renderModalForm();

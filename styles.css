@@ -8,7 +8,6 @@ body {
 #max-score {
   font-family: "Press Start 2P", cursive;
   font-size: 2rem;
-
   color: #fef2bf;
 }
 
@@ -26,16 +25,20 @@ body {
 }
 
 .container {
-  display: block;
-  width: 50%;
+  display: grid;
+  grid-template:
+    "a b" 1fr
+    "c d" 1fr;
+  align-items: center;
+  justify-content: center;
+  /* width: 50%; */
   margin: auto;
 }
 
 .btn {
-  margin: 25px;
-  display: inline-block;
-  height: 200px;
-  width: 200px;
+  margin: 30px;
+  height: 10em;
+  width: 10em;
   border: 10px solid black;
   border-radius: 20%;
 }
@@ -85,8 +88,6 @@ body {
   border-radius: 2rem;
   box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
   z-index: 10;
-
-  /* transition: all 1s; */
 }
 
 .overlay {
@@ -98,7 +99,6 @@ body {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
   z-index: 5;
-  /* transition: all 1s; */
 }
 
 .show-modal {
