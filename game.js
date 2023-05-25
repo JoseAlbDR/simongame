@@ -4,8 +4,29 @@ const buttons = $("div.btn");
 let playerPattern = [];
 let gamePattern = [];
 const btnArr = ["green", "red", "yellow", "blue"];
+let maxScore;
 let level = 0;
 let clicks = 1;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// DATA
+
+// Load data from local storage
+const loadData = function () {
+  console.log(localStorage.getItem("score") ?? 0);
+
+  return localStorage.getItem("score") ?? 0;
+};
+
+// Save data into local storage
+const saveData = function () {
+  const savedMaxScore = loadData();
+
+  // Check if saved max score is greater than current level
+  savedMaxScore > level
+    ? localStorage.setItem("score", currentMaxScore)
+    : localStorage.setItem("score", level);
+};
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // UTILS
@@ -127,6 +148,9 @@ const gameOver = function () {
   // Show animation
   showGameOverAnimation();
 
+  // Save score
+  saveData();
+
   // Play sound
   const wrongAudio = document.createElement("audio");
   wrongAudio.setAttribute("src", "./sounds/wrong.mp3");
@@ -149,7 +173,10 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
+    maxScore = loadData();
+    $("h2").text(`Max Score: ${maxScore}`);
   }
+  console.log(maxScore);
 
   // Secuence loop
   playerPattern = [];
