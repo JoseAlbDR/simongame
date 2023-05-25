@@ -1,7 +1,7 @@
 const header = $("h1");
 const buttons = $("div.btn");
-const playerPattern = [];
-const gamePattern = [];
+let playerPattern = [];
+let gamePattern = [];
 const btnArr = ["green", "red", "yellow", "blue"];
 let level = 0;
 let clicks = 1;
@@ -16,6 +16,30 @@ const generateAudio = function () {
   });
 };
 
+const checkEquals = function (game, player) {
+  if (game.length !== player.length) return false;
+
+  for (let i = 0; i < game.length; i++) if (game[i] !== player[i]) return false;
+
+  return true;
+};
+
+const gameOver = function () {
+  header.text("Game Over, Press Any Key To Restart");
+  $("body").addClass("game-over");
+  setTimeout(function () {
+    $("body").removeClass("game-over");
+  }, 100);
+  const wrongAudio = document.createElement("audio");
+  wrongAudio.setAttribute("src", "./sounds/wrong.mp3");
+  wrongAudio.play();
+  stopBtnListeners();
+  startKeyListener();
+  gamePattern = [];
+  playerPattern = [];
+  level = 0;
+};
+
 const btnClicked = function (btn) {
   $(`div#${btn.target.id}`).addClass("pressed");
   setTimeout(function () {
@@ -26,8 +50,12 @@ const btnClicked = function (btn) {
   playSound($(jButton), audios);
   playerPattern.push(btn.target.id);
   console.log(playerPattern);
+  console.log(gamePattern);
 
-  if (clicks === gamePattern.length) {
+  console.log(checkEquals(gamePattern, playerPattern));
+  if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
+    gameOver();
+  } else if (clicks === gamePattern.length) {
     setTimeout(function () {
       nextSecuence();
       clicks = 1;
@@ -37,7 +65,11 @@ const btnClicked = function (btn) {
   }
 };
 
-const addBtnListeners = function () {
+const stopBtnListeners = function () {
+  buttons.off();
+};
+
+const startBtnListeners = function () {
   buttons.on("click", btnClicked);
 };
 
@@ -55,17 +87,17 @@ const playSound = function (btn, audios) {
   });
 };
 
-const btnAnimation = function (btn, audios) {
-  btn.fadeToggle("fast", "linear");
-  btn.fadeToggle("fast", "linear");
+const showAnimation = function (item, audios) {
+  item.fadeToggle("fast", "linear");
+  item.fadeToggle("fast", "linear");
 
-  playSound(btn, audios);
+  playSound(item, audios);
 };
 
 const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
-    addBtnListeners();
+    startBtnListeners();
   }
 
   playerPattern.splice(0, playerPattern.length);
@@ -74,10 +106,9 @@ const nextSecuence = function () {
   const btn = $(`.${color}`);
   const audios = generateAudio();
   gamePattern.push(color);
-  console.log(gamePattern);
 
   header.text(`Level ${level}`);
-  btnAnimation(btn, audios);
+  showAnimation(btn, audios);
 
   level += 1;
 };
