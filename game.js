@@ -47,6 +47,7 @@ const closeModal = function () {
   }, 500);
   player = { name: "X", maxScore: 0 };
   startKeyListener();
+  startTitleListener();
 };
 
 // Close Modal listeners
@@ -108,6 +109,7 @@ const acceptModal = function () {
 
       closeModal();
       startKeyListener();
+      startTitleListener();
     }
   });
 };
@@ -115,6 +117,15 @@ const acceptModal = function () {
 //////////////////////////////////////////////////////
 // Game
 //
+
+const startTitleListener = function () {
+  $("#level-title").on("click", nextSecuence);
+};
+
+const stopTitleListener = function () {
+  $("#level-title").off();
+};
+
 // Start button listener
 const startBtnListeners = function () {
   buttons.on("click", btnClicked);
@@ -238,6 +249,7 @@ const gameOver = function () {
   // Reset variables and listeners
   stopBtnListeners();
   startKeyListener();
+  startTitleListener();
   gamePattern = [];
   playerPattern = [];
   level = 0;
@@ -251,9 +263,12 @@ const nextSecuence = function () {
   // If first call
   if (level === 0) {
     $(".container").removeClass("hidden");
+    // Stop game starter listener
+    stopTitleListener();
     stopKeyListener();
+
+    // Start game button listeners
     startBtnListeners();
-    console.log(player);
 
     $("#player-name").text(player.name);
     $("#max-score").text(`Max Score: ${player.maxScore}`);
