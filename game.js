@@ -8,25 +8,21 @@ let maxScore;
 let level = 0;
 let clicks = 1;
 let player = "";
+let players = [];
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
 
 // Load data from local storage
 const loadData = function () {
-  console.log(localStorage.getItem("score") ?? 0);
-  return localStorage.getItem("score") ?? 0;
+  console.log(localStorage.getItem("players") ?? 0);
+  return JSON.parse(localStorage.getItem("players")) ?? [];
 };
 
 // Save data into local storage
 const saveData = function () {
-  const savedMaxScore = loadData();
-  console.log(savedMaxScore);
-
   // Check if saved max score is greater than current level
-  savedMaxScore > level
-    ? localStorage.setItem("score", savedMaxScore)
-    : localStorage.setItem("score", level - 1);
+  localStorage.setItem("players", JSON.stringify(players));
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,10 +56,14 @@ const escCloseModal = function () {
 };
 
 const acceptModal = function () {
-  console.log($("#form-button"));
-
   $("#form-button").on("click", function (event) {
     event.preventDefault();
+    const player = {
+      name: "Player 1",
+      maxScore: 100,
+    };
+    players.push(player);
+    saveData();
     closeModal();
     console.log(this);
   });
@@ -203,8 +203,9 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
-    maxScore = loadData();
-    $("h2").text(`Max Score: ${maxScore}`);
+    players = loadData();
+    $("#max-score").text(`Max Score: ${players[0].maxScore}`);
+    $("#player-name").text(`${players[0].name}`);
   }
   console.log(maxScore);
 
