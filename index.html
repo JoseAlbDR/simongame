@@ -8,13 +8,14 @@
       href="https://fonts.googleapis.com/css?family=Press+Start+2P"
       rel="stylesheet"
     />
+    <script defer type="module" src="game.js"></script>
   </head>
 
   <body>
     <h2 id="player-name"></h2>
     <h2 id="max-score"></h2>
     <h1 id="level-title">Press A Key to Start</h1>
-    <div class="container">
+    <div class="container hidden">
       <div class="row">
         <div type="button" id="green" class="btn green"></div>
 
@@ -43,6 +44,5 @@
     <div class="overlay hidden"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="game.js"></script>
   </body>
 </html>

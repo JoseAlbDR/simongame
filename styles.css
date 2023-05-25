@@ -1,8 +1,12 @@
 body {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #011f3f;
   transition: all 1s;
   font-family: "Press Start 2P", cursive;
+  overflow: hidden;
 }
 
 #max-score {
@@ -135,9 +139,11 @@ body {
 }
 .modal p {
   margin-bottom: 1rem;
+  text-align: center;
 }
 .modal h1 {
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .modal input,

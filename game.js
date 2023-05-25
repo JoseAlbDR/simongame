@@ -250,6 +250,7 @@ const gameOver = function () {
 const nextSecuence = function () {
   // If first call
   if (level === 0) {
+    $(".container").removeClass("hidden");
     stopKeyListener();
     startBtnListeners();
     console.log(player);
