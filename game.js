@@ -47,7 +47,6 @@ const closeModal = function () {
   }, 500);
   player = { name: "X", maxScore: 0 };
   startKeyListener();
-  startTitleListener();
 };
 
 // Close Modal listeners
@@ -109,7 +108,6 @@ const acceptModal = function () {
 
       closeModal();
       startKeyListener();
-      startTitleListener();
     }
   });
 };
@@ -281,6 +279,8 @@ const nextSecuence = function () {
   const color = btnArr[randomNum];
   const btn = $(`.${color}`);
   const audios = generateBtnAudio();
+  console.log(randomNum);
+
   gamePattern.push(color);
   showGameAnimation(btn, audios);
   header.text(`Level ${level}`);
@@ -307,6 +307,7 @@ const gameLoop = function () {
   players = loadData();
   renderModalForm();
   optionListListener();
+  startTitleListener();
 };
 
 gameLoop();
