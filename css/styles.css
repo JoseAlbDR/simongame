@@ -38,9 +38,9 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 .btn {
-  margin: 30px;
-  height: 10em;
-  width: 10em;
+  margin: 10px;
+  height: 15em;
+  width: 15em;
   border: 10px solid black;
   border-radius: 20%;
 }
@@ -52,18 +52,22 @@ body {
 
 .red {
   background-color: red;
+  border-radius: 0 0 0 100%;
 }
 
 .green {
   background-color: green;
+  border-radius: 100% 0 0 0;
 }
 
 .blue {
   background-color: blue;
+  border-radius: 0 0 100% 0;
 }
 
 .yellow {
   background-color: yellow;
+  border-radius: 0 100% 0 0;
 }
 
 .pressed {
