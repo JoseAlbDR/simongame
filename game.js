@@ -1,3 +1,4 @@
+// Variables
 const header = $("h1");
 const buttons = $("div.btn");
 let playerPattern = [];
@@ -6,7 +7,42 @@ const btnArr = ["green", "red", "yellow", "blue"];
 let level = 0;
 let clicks = 1;
 
-const generateAudio = function () {
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// UTILS
+
+// Generate a randon number (0-3)
+const generateRandom = function () {
+  return Math.trunc(Math.random() * 4);
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// LISTENERS
+
+// Start button listener
+const startBtnListeners = function () {
+  buttons.on("click", btnClicked);
+};
+
+// Stop button listener
+const stopBtnListeners = function () {
+  buttons.off();
+};
+
+// Start keyboard listener
+const startKeyListener = function () {
+  $(document).on("keydown", nextSecuence);
+};
+
+// Stop keybard listener
+const stopKeyListener = function () {
+  $(document).off();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// AUDIO
+
+// Generate button audio elements
+const generateBtnAudio = function () {
   return btnArr.map((color) => {
     const audioElement = document.createElement("audio");
     audioElement.setAttribute("src", `./sounds/${color}.mp3`);
@@ -16,23 +52,87 @@ const generateAudio = function () {
   });
 };
 
-const checkEquals = function (game, player) {
-  if (game.length !== player.length) return false;
-
-  for (let i = 0; i < game.length; i++) if (game[i] !== player[i]) return false;
-
-  return true;
+// Play sound for given btn
+const playBtnSound = function (btn, audios) {
+  audios.forEach((audio) => {
+    if (audio.dataset.color === btn.attr("id")) audio.play();
+  });
 };
 
-const gameOver = function () {
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ANIMATIONS
+
+// Game loop animation
+const showGameAnimation = function (item, audios) {
+  item.fadeToggle("fast", "linear");
+  item.fadeToggle("fast", "linear");
+
+  playBtnSound(item, audios);
+};
+
+// Button click animation
+const showBtnAnimation = function (btn) {
+  $(`div#${btn.id}`).addClass("pressed");
+  setTimeout(function () {
+    $(`div#${btn.id}`).removeClass("pressed");
+  }, 100);
+};
+
+// Game over animation
+const showGameOverAnimation = function () {
   header.text("Game Over, Press Any Key To Restart");
   $("body").addClass("game-over");
   setTimeout(function () {
     $("body").removeClass("game-over");
   }, 100);
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// EVENTS
+
+// Button click behaviour
+const btnClicked = function (event) {
+  // Show animation
+  showBtnAnimation(event.target);
+
+  // Play audio
+  const audios = generateBtnAudio();
+  const jButton = $(`#${event.target.id}`);
+  playBtnSound($(jButton), audios);
+
+  // Save player pattern
+  playerPattern.push(event.target.id);
+
+  // Check if button's color is equal to color in gamePatter
+  // If not GAME OVER
+  if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
+    gameOver();
+
+    // If Clicks are the same amount of colors in gamePattern
+  } else if (clicks === gamePattern.length) {
+    setTimeout(function () {
+      // Call next secuence of colors
+      nextSecuence();
+      // Reset clicks
+      clicks = 1;
+    }, 1000);
+    // If not increase clicks and keep checking
+  } else {
+    clicks += 1;
+  }
+};
+
+// Game Over Event
+const gameOver = function () {
+  // Show animation
+  showGameOverAnimation();
+
+  // Play sound
   const wrongAudio = document.createElement("audio");
   wrongAudio.setAttribute("src", "./sounds/wrong.mp3");
   wrongAudio.play();
+
+  // Reset variables and listeners
   stopBtnListeners();
   startKeyListener();
   gamePattern = [];
@@ -40,89 +140,30 @@ const gameOver = function () {
   level = 0;
 };
 
-const btnClicked = function (btn) {
-  $(`div#${btn.target.id}`).addClass("pressed");
-  setTimeout(function () {
-    $(`div#${btn.target.id}`).removeClass("pressed");
-  }, 100);
-  const audios = generateAudio();
-  const jButton = $(`#${btn.target.id}`);
-  playSound($(jButton), audios);
-  playerPattern.push(btn.target.id);
-  console.log(playerPattern);
-  console.log(gamePattern);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// GAME LOOP
 
-  console.log(checkEquals(gamePattern, playerPattern));
-  if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
-    gameOver();
-  } else if (clicks === gamePattern.length) {
-    setTimeout(function () {
-      nextSecuence();
-      clicks = 1;
-    }, 1000);
-  } else {
-    clicks += 1;
-  }
-};
-
-const stopBtnListeners = function () {
-  buttons.off();
-};
-
-const startBtnListeners = function () {
-  buttons.on("click", btnClicked);
-};
-
-const generateRandom = function () {
-  return Math.trunc(Math.random() * 4);
-};
-
-const activeButton = function (btn) {
-  btn.fadeToggle();
-};
-
-const playSound = function (btn, audios) {
-  audios.forEach((audio) => {
-    if (audio.dataset.color === btn.attr("id")) audio.play();
-  });
-};
-
-const showAnimation = function (item, audios) {
-  item.fadeToggle("fast", "linear");
-  item.fadeToggle("fast", "linear");
-
-  playSound(item, audios);
-};
-
+// Game secuene
 const nextSecuence = function () {
+  // If first call
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
   }
 
-  playerPattern.splice(0, playerPattern.length);
+  // Secuence loop
+  playerPattern = [];
   const randomNum = generateRandom();
   const color = btnArr[randomNum];
   const btn = $(`.${color}`);
-  const audios = generateAudio();
+  const audios = generateBtnAudio();
   gamePattern.push(color);
-
+  showGameAnimation(btn, audios);
   header.text(`Level ${level}`);
-  showAnimation(btn, audios);
-
   level += 1;
 };
 
-const startKeyListener = function () {
-  $(document).on("keydown", function () {
-    nextSecuence();
-  });
-};
-
-const stopKeyListener = function () {
-  $(document).off();
-};
-
+// Game Start
 const gameLoop = function () {
   startKeyListener();
 };
