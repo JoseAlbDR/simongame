@@ -4,6 +4,7 @@ const playerPattern = [];
 const gamePattern = [];
 const btnArr = ["green", "red", "yellow", "blue"];
 let level = 0;
+let clicks = 1;
 
 const generateAudio = function () {
   return btnArr.map((color) => {
@@ -24,6 +25,16 @@ const btnClicked = function (btn) {
   const jButton = $(`#${btn.target.id}`);
   playSound($(jButton), audios);
   playerPattern.push(btn.target.id);
+  console.log(playerPattern);
+
+  if (clicks === gamePattern.length) {
+    setTimeout(function () {
+      nextSecuence();
+      clicks = 1;
+    }, 1000);
+  } else {
+    clicks += 1;
+  }
 };
 
 const addBtnListeners = function () {
@@ -52,19 +63,27 @@ const btnAnimation = function (btn, audios) {
 };
 
 const nextSecuence = function () {
-  stopKeyListener();
+  if (level === 0) {
+    stopKeyListener();
+    addBtnListeners();
+  }
+
+  playerPattern.splice(0, playerPattern.length);
   const randomNum = generateRandom();
   const color = btnArr[randomNum];
   const btn = $(`.${color}`);
   const audios = generateAudio();
   gamePattern.push(color);
+  console.log(gamePattern);
+
   header.text(`Level ${level}`);
   btnAnimation(btn, audios);
-  addBtnListeners();
+
+  level += 1;
 };
 
 const startKeyListener = function () {
-  $(document).on("keydown", function (event) {
+  $(document).on("keydown", function () {
     nextSecuence();
   });
 };
