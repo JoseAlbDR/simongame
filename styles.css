@@ -142,13 +142,21 @@ body {
   margin-bottom: 5rem;
 }
 
-.modal input {
+.modal input,
+select {
   padding: 1rem;
   font-size: 1rem;
   font-family: "Press Start 2P", cursive;
+  color: #011f3f;
+  text-align: center;
 }
 
 #player-form {
   display: flex;
   flex-direction: column;
+}
+
+#err-msg {
+  height: 2rem;
+  color: red;
 }

@@ -15,7 +15,6 @@ let players = [];
 
 // Load data from local storage
 const loadData = function () {
-  console.log(localStorage.getItem("players") ?? 0);
   return JSON.parse(localStorage.getItem("players")) ?? [];
 };
 
@@ -58,14 +57,23 @@ const escCloseModal = function () {
 const acceptModal = function () {
   $("#form-button").on("click", function (event) {
     event.preventDefault();
-    const player = {
-      name: "Player 1",
-      maxScore: 100,
-    };
-    players.push(player);
-    saveData();
-    closeModal();
-    console.log(this);
+    const inputName = $("#player").val();
+
+    if (inputName.trim() === "") {
+      $("#err-msg").text("New Player Name Cant Be Empty");
+      return;
+    } else {
+      players.forEach((player) => {
+        if (inputName === player.name) {
+          $("#err-msg").text("Player already exist.");
+          return;
+        }
+      });
+      players.push({ name: inputName, maxScore: 0 });
+      saveData();
+      closeModal();
+      startKeyListener();
+    }
   });
 };
 
@@ -203,9 +211,6 @@ const nextSecuence = function () {
   if (level === 0) {
     stopKeyListener();
     startBtnListeners();
-    players = loadData();
-    $("#max-score").text(`Max Score: ${players[0].maxScore}`);
-    $("#player-name").text(`${players[0].name}`);
   }
   console.log(maxScore);
 
@@ -221,6 +226,21 @@ const nextSecuence = function () {
   level += 1;
 };
 
+const renderModalForm = function () {
+  $("#players").html("");
+
+  if (players.length === 0) {
+    $("#players").html(`<option value="empty">Empty</option>`);
+  } else {
+    players.forEach((player) => {
+      console.log(player);
+      $("#players").append(
+        `<option value="${player.name}">${player.name}</option>`
+      );
+    });
+  }
+};
+
 // Game Start
 const gameLoop = function () {
   // player = prompt("Player name?");
@@ -228,7 +248,9 @@ const gameLoop = function () {
   $(".overlay").removeClass("hidden");
   escCloseModal();
   acceptModal();
-  startKeyListener();
+  players = loadData();
+
+  renderModalForm();
 };
 
 gameLoop();
