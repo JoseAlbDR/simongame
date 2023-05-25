@@ -7,6 +7,7 @@ const btnArr = ["green", "red", "yellow", "blue"];
 let maxScore;
 let level = 0;
 let clicks = 1;
+let player = "";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
@@ -14,18 +15,18 @@ let clicks = 1;
 // Load data from local storage
 const loadData = function () {
   console.log(localStorage.getItem("score") ?? 0);
-
   return localStorage.getItem("score") ?? 0;
 };
 
 // Save data into local storage
 const saveData = function () {
   const savedMaxScore = loadData();
+  console.log(savedMaxScore);
 
   // Check if saved max score is greater than current level
   savedMaxScore > level
-    ? localStorage.setItem("score", currentMaxScore)
-    : localStorage.setItem("score", level);
+    ? localStorage.setItem("score", savedMaxScore)
+    : localStorage.setItem("score", level - 1);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,6 +39,35 @@ const generateRandom = function () {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // LISTENERS
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Modal
+
+// Close modal
+const closeModal = function () {
+  $(".overlay").addClass("hidden");
+  $(".modal").stop().animate({ opacity: 0 });
+  setTimeout(function () {
+    $(".modal").css("z-index", -1);
+  }, 500);
+};
+// Close Modal listeners
+const escCloseModal = function () {
+  $(".close-modal").on("click", function (event) {
+    event.preventDefault();
+    closeModal();
+  });
+};
+
+const acceptModal = function () {
+  console.log($("#form-button"));
+
+  $("#form-button").on("click", function (event) {
+    event.preventDefault();
+    closeModal();
+    console.log(this);
+  });
+};
 
 // Start button listener
 const startBtnListeners = function () {
@@ -192,6 +222,11 @@ const nextSecuence = function () {
 
 // Game Start
 const gameLoop = function () {
+  // player = prompt("Player name?");
+  // $(".modal").removeClass("hidden");
+  $(".overlay").removeClass("hidden");
+  escCloseModal();
+  acceptModal();
   startKeyListener();
 };
 
