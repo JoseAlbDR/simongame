@@ -60,8 +60,8 @@ const acceptModal = function () {
     const inputName = $("#player").val();
     console.log($("#players").val());
 
-    if (inputName.trim() === "") {
-      $("#err-msg").text("New Player Name Cant Be Empty");
+    if (inputName.trim() === "" && $("#players").val() === "") {
+      $("#err-msg").html("<p>New Player Name Cant Be Empty</p>");
       return;
     } else if (
       players.some(function (player) {
@@ -72,10 +72,14 @@ const acceptModal = function () {
         "<p>Player already exist.</p><p>Choose player from list and Click Accept.</p>"
       );
     } else {
-      if ($("#players").val() === "") player = { name: inputName, maxScore: 0 };
-
+      if ($("#players").val() === "") {
+        player = { name: inputName, maxScore: 0 };
+      } else {
+        player = players.filter((player) => {
+          if (player.name === $("#players").val()) return player;
+        });
+      }
       players.push(player);
-
       saveData();
       closeModal();
       startKeyListener();
@@ -240,7 +244,6 @@ const renderModalForm = function () {
 
   $("#players").append(`<option value=""></option>`);
   players.forEach((player) => {
-    console.log(player);
     $("#players").append(
       `<option value="${player.name}">${player.name}</option>`
     );
