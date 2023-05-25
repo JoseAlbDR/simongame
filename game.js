@@ -45,6 +45,8 @@ const closeModal = function () {
   setTimeout(function () {
     $(".modal").css("z-index", -1);
   }, 500);
+  player = { name: "X", maxScore: 0 };
+  startKeyListener();
 };
 
 // Close Modal listeners
@@ -282,7 +284,7 @@ const gameLoop = function () {
   // player = prompt("Player name?");
   // $(".modal").removeClass("hidden");
   $(".overlay").removeClass("hidden");
-  // escCloseModal();
+  escCloseModal();
   acceptModal();
   players = loadData();
   renderModalForm();
