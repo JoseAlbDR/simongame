@@ -39,13 +39,15 @@ const generateRandom = function () {
 // Modal
 
 // Close modal
-const closeModal = function () {
+const closeModal = function (event = "") {
   $(".overlay").addClass("hidden");
   $(".modal").stop().animate({ opacity: 0 });
   setTimeout(function () {
     $(".modal").css("z-index", -1);
   }, 500);
-  player = { name: "X", maxScore: 0 };
+
+  if (event !== "" && event?.target.classList[0].includes("close"))
+    player = { name: "X", maxScore: 0 };
   startKeyListener();
 };
 
@@ -53,7 +55,7 @@ const closeModal = function () {
 const escCloseModal = function () {
   $(".close-modal").on("click", function (event) {
     event.preventDefault();
-    closeModal();
+    closeModal(event);
   });
 };
 
@@ -72,14 +74,16 @@ const acceptModal = function () {
 
     // Save input data
     const inputName = $("#player").val();
+    const selectedPlayer = $("#players").val();
 
     // If no input and no player selected
-    if (inputName.trim() === "" && $("#players").val() === "") {
+    if (inputName.trim() === "" && selectedPlayer === "") {
       $("#err-msg").html("<p>New Player Name Cant Be Empty</p>");
       return;
+    }
 
-      // If player selected already exist
-    } else if (
+    // If player selected already exist
+    if (
       players.some(function (player) {
         return inputName.toLowerCase() === player.name.toLowerCase();
       })
@@ -91,21 +95,19 @@ const acceptModal = function () {
       // If input not empty and player does not exist
     } else {
       // If no player is selected from list, create new player
-      if ($("#players").val() === "") {
+      if (selectedPlayer === "") {
         player = { name: inputName, maxScore: 0 };
         players.push(player);
         saveData();
 
         // If there is a player selected in list, load that player
       } else {
-        player = players.filter((player) => {
-          if (player.name.toLowerCase() === $("#players").val().toLowerCase())
-            return player;
-        });
-        [player] = [...player];
+        player = players.find(
+          (player) => player.name.toLowerCase() === selectedPlayer.toLowerCase()
+        );
       }
 
-      // Save player in variable, close modal and star keylistener
+      console.log(event.target);
 
       closeModal();
       startKeyListener();
