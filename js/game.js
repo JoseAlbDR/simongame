@@ -9,6 +9,7 @@ let level = 0;
 let clicks = 1;
 let player;
 let players = [];
+var is_animation = false;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // DATA
@@ -202,38 +203,38 @@ const showGameOverAnimation = function () {
 // Button click behaviour
 const btnClicked = function (event) {
   // Show animation
-  showBtnAnimation(event.target);
-  console.log(event.target);
-  console.log(this);
+  console.log(`is_animation inside btnClicked: ${is_animation}`);
 
-  // Play audio
-  const audios = generateBtnAudio();
-  const jButton = $(`#${event.target.id}`);
-  playBtnSound($(jButton), audios);
+  if (!is_animation) {
+    showBtnAnimation(event.target);
 
-  // Save player pattern
-  playerPattern.push(event.target.id);
+    // Play audio
+    const audios = generateBtnAudio();
+    const jButton = $(`#${event.target.id}`);
+    playBtnSound($(jButton), audios);
 
-  console.log("Clicks" + clicks);
+    // Save player pattern
+    playerPattern.push(event.target.id);
 
-  // Check if button's color is equal to color in gamePatter
-  // If not GAME OVER
-  if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
-    gameOver();
-    clicks = 1;
-    // If Clicks are the same amount of colors in gamePattern
-  } else if (clicks === gamePattern.length) {
-    console.log(gamePattern);
+    // Check if button's color is equal to color in gamePatter
+    // If not GAME OVER
+    if (gamePattern[clicks - 1] !== playerPattern[clicks - 1]) {
+      gameOver();
+      clicks = 1;
+      // If Clicks are the same amount of colors in gamePattern
+    } else if (clicks === gamePattern.length) {
+      console.log(gamePattern);
 
-    // Call next secuence of colors
-    nextSecuence();
+      // Call next secuence of colors
+      nextSecuence();
 
-    // Reset clicks
-    clicks = 1;
+      // Reset clicks
+      clicks = 1;
 
-    // If not increase clicks and keep checking
-  } else {
-    clicks += 1;
+      // If not increase clicks and keep checking
+    } else {
+      clicks += 1;
+    }
   }
 };
 
@@ -292,9 +293,20 @@ const nextSecuence = function () {
 
   let i = 0;
   const interval = setInterval(function () {
+    is_animation = true;
+    console.log(
+      `is_animation inside set Interval BEFORE showGameAnimation: ${is_animation}`
+    );
+
     showGameAnimation($(`.${gamePattern[i]}`), audios);
     i++;
     if (i === gamePattern.length) clearInterval(interval);
+    setTimeout(() => {
+      is_animation = false;
+      console.log(
+        `is_animation inside set Interval AFTER showGameAnimation: ${is_animation}`
+      );
+    }, 700 * gamePattern.length);
   }, 700);
 
   header.text(`Level ${level}`);
