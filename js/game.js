@@ -203,8 +203,6 @@ const showGameOverAnimation = function () {
 // Button click behaviour
 const btnClicked = function (event) {
   // Show animation
-  console.log(`is_animation inside btnClicked: ${is_animation}`);
-
   if (!is_animation) {
     showBtnAnimation(event.target);
 
@@ -294,18 +292,11 @@ const nextSecuence = function () {
   let i = 0;
   const interval = setInterval(function () {
     is_animation = true;
-    console.log(
-      `is_animation inside set Interval BEFORE showGameAnimation: ${is_animation}`
-    );
-
     showGameAnimation($(`.${gamePattern[i]}`), audios);
     i++;
     if (i === gamePattern.length) clearInterval(interval);
     setTimeout(() => {
       is_animation = false;
-      console.log(
-        `is_animation inside set Interval AFTER showGameAnimation: ${is_animation}`
-      );
     }, 700 * gamePattern.length);
   }, 700);
 
