@@ -165,9 +165,7 @@ const generateBtnAudio = function () {
 
 // Play sound for given btn
 const playBtnSound = function (btn, audios) {
-  audios.forEach((audio) => {
-    if (audio.dataset.color === btn.attr("id")) audio.play();
-  });
+  audios.find((audio) => audio.dataset.color === btn.attr("id")).play();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,6 +203,8 @@ const showGameOverAnimation = function () {
 const btnClicked = function (event) {
   // Show animation
   showBtnAnimation(event.target);
+  console.log(event.target);
+  console.log(this);
 
   // Play audio
   const audios = generateBtnAudio();
