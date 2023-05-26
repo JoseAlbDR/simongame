@@ -295,7 +295,7 @@ const nextSecuence = function () {
     showGameAnimation($(`.${gamePattern[i]}`), audios);
     i++;
     if (i === gamePattern.length) clearInterval(interval);
-  }, 1000);
+  }, 700);
 
   header.text(`Level ${level}`);
   level += 1;
